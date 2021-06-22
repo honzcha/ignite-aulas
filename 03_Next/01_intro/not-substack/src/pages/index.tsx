@@ -1,4 +1,7 @@
 import Head from 'next/head'
+import React from 'react'
+
+import styles from './home.module.scss';
 
 export default function Home() {
   return (
@@ -6,9 +9,20 @@ export default function Home() {
       <Head>
         <title>Home | Not substack</title>
       </Head>
-        <h1>
-          Hi
-        </h1>
+       
+       <main className={styles.contentContainer}>
+          <section className={styles.hero}>
+            <span>👏 Hey, Welcome</span>
+            <h1>News about the <span>React</span> world.</h1>
+
+            <p>
+              Get access to all content <br />
+              <span>for $9.90 month</span>
+            </p>
+          </section>
+
+          <img src="/images/avatar.svg" alt="Girl Coding"/>
+       </main>
     </>
   )
 }
