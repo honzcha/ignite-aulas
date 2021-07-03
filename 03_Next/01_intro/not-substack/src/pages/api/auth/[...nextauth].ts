@@ -28,7 +28,7 @@ export default NextAuth({
         )
       )
 
-      try {
+      try{
         await fauna.query(
           q.If(
             q.Not(
@@ -41,7 +41,7 @@ export default NextAuth({
             ),
             q.Create(
               q.Collection('users'),
-              {data: { email }}
+              { data: { email } }
             ),
             q.Get(
               q.Match(
@@ -52,11 +52,10 @@ export default NextAuth({
           )
         )
 
-        return true
+        return true;
 
-      } catch(err) {
-        console.log(err)
-        return false
+      } catch {
+        return false;
       }
     },
   }
