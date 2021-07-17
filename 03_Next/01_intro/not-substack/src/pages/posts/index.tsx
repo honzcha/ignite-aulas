@@ -3,8 +3,20 @@ import Head from 'next/head'
 import { getPrismicClient } from '../../services/prismic'
 import styles from './styles.module.scss'
 import Prismic from '@prismicio/client'
+import { RichText } from 'prismic-dom'
 
-export default function Posts() {
+type Post = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  updatedAt: string;
+}
+
+interface PostProps {
+  posts: Post[]
+}
+
+export default function Posts({posts}:PostProps) {
   return (
     <>
       <Head>
@@ -14,21 +26,13 @@ export default function Posts() {
 
       <main className={styles.container}>
         <div className={styles.posts}>
-          <a href="#">
-            <time>15 July 2021</time>
-            <strong>Non sint anim qui deserunt aute amet ullamco.</strong>
-            <p>Nulla nostrud cillum ad eiusmod irure cillum excepteur. Aute anim consequat ex est commodo amet.</p>
+          {posts.map(post => (
+            <a key={post.slug} href="#">
+            <time>{post.updatedAt}</time>
+            <strong>{post.title}</strong>
+            <p>{post.excerpt}</p>
           </a>
-          <a href="#">
-            <time>15 July 2021</time>
-            <strong>Non sint anim qui deserunt aute amet ullamco.</strong>
-            <p>Nulla nostrud cillum ad eiusmod irure cillum excepteur. Aute anim consequat ex est commodo amet.</p>
-          </a>
-          <a href="#">
-            <time>15 July 2021</time>
-            <strong>Non sint anim qui deserunt aute amet ullamco.</strong>
-            <p>Nulla nostrud cillum ad eiusmod irure cillum excepteur. Aute anim consequat ex est commodo amet.</p>
-          </a>
+          ))}
         </div>
       </main>
 
@@ -46,9 +50,20 @@ export const getStaticProps: GetStaticProps = async () => {
     pageSize: 100,
   })
 
-  console.log(JSON.stringify(response, null, 2))
+  const posts = response.results.map(post => {
+    return {
+      slug: post.uid,
+      title: RichText.asText(post.data.title),
+      excerpt: post.data.content.find(content => content.type === 'paragraph')?.text ?? '',
+      updatedAt: new Date(post.last_publication_date).toLocaleDateString('en-US', { 
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+      })
+    }
+  })
 
   return {
-    props: {}
+    props: {posts}
   }
 }
