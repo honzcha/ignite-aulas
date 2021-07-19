@@ -17,6 +17,26 @@ export default NextAuth({
   //   signingKey: process.env.JWT_SIGNING_PRIVATE_KEY,
   // },
   callbacks: {
+    async session(session) {
+      
+
+      const userActiveSubscription = await fauna.query(
+        g.Get(
+          q.Match(
+            q.Index('subscription_by_user_ref'),
+            q.Select('ref',
+            q.Get(
+              q.Match(
+                q.Index('user_by_email'),
+                q.Casefold(session.user.email)
+              )
+            ))
+          )
+        )
+      )
+      return session
+    },
+
     async signIn(user, account, profile) {
       const { email } = user;
 
