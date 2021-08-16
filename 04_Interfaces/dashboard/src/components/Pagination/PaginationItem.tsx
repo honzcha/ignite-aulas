@@ -11,7 +11,7 @@ export function PaginationItem({isCurrent = false, number}:PaginationItemProps) 
     return( 
       <Button 
         size="sm"
-        fontsize="xs"
+        fontSize="xs"
         width="4"
         colorScheme="pink"
         disabled
@@ -28,7 +28,7 @@ export function PaginationItem({isCurrent = false, number}:PaginationItemProps) 
     
       <Button 
         size="sm"
-        fontsize="xs"
+        fontSize="xs"
         width="4"
         bgColor="gray.700"
         _hover={{
